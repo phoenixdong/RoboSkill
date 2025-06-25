@@ -1,6 +1,7 @@
-import socket
 import json
-from typing import Tuple, Optional
+import socket
+from typing import Optional, Tuple
+
 
 class RealmanChassis:
     """
@@ -14,7 +15,7 @@ class RealmanChassis:
         Args:
             host (str): IP address or hostname of the chassis server.
             port (int): Port number to connect to.
-        
+
         Raises:
             ConnectionError: If the socket connection fails.
         """
@@ -42,7 +43,9 @@ class RealmanChassis:
             print(f"[ERROR] Failed to get current pose: {e}")
             return None
 
-    def move_to_position(self, marker_name: str) -> Tuple[Optional[dict], Optional[dict], str]:
+    def move_to_position(
+        self, marker_name: str
+    ) -> Tuple[Optional[dict], Optional[dict], str]:
         """
         Move the robot to a specified marker position.
 
@@ -50,7 +53,7 @@ class RealmanChassis:
             marker_name (str): The name of the marker to move to.
 
         Returns:
-            Tuple[Optional[dict], Optional[dict], str]: 
+            Tuple[Optional[dict], Optional[dict], str]:
                 - start_pose: Pose before the move
                 - target_pose: Pose after the move
                 - status: Move status string (e.g., "success", "failed")
@@ -69,7 +72,7 @@ class RealmanChassis:
             try:
                 response_status = self.client.recv(2048).decode()
                 data_status = json.loads(response_status)
-                if data_status.get("code") == "01002": 
+                if data_status.get("code") == "01002":
                     break
             except json.JSONDecodeError:
                 print(f"[WARN] Ignoring invalid JSON chunk.")

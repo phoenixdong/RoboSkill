@@ -2,6 +2,11 @@ import json
 import socket
 from typing import Optional, Tuple
 
+from mcp.server.fastmcp import FastMCP
+
+robot_host = "127.0.0.1"
+robot_port = "5000"
+
 
 class RealmanChassis:
     """
@@ -98,3 +103,40 @@ class RealmanChassis:
         """
         self.client.close()
         print(f"[INFO] Connection closed")
+
+
+# Initialize FastMCP server
+mcp = FastMCP("robots")
+
+
+@mcp.tool()
+def navigate_to_target(marker_name: str) -> dict:
+    """
+    Perform navigation of the robot to a specified marker position.
+
+    Args:
+        marker_name (str): The destination marker name.
+
+    Returns:
+        str: A message indicating whether navigation to the marker succeeded or failed.
+
+    Raises:
+        FileNotFoundError: If `config.yaml` does not exist.
+        KeyError: If required keys (host, port) are missing in the config file.
+        Exception: Any error during robot communication or movement execution.
+
+    """
+
+    robot = RealmanChassis(robot_host, robot_port)
+    robot.cancel_current_move()
+    _, _, status = robot.move_to_position(marker_name)
+    robot.close_connection()
+
+    return (
+        f"Navigation to '{marker_name}' {'succeeded' if status == 'ok' else 'failed'}"
+    )
+
+
+if __name__ == "__main__":
+    # Initialize and run the server
+    mcp.run(transport="stdio")

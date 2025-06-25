@@ -1,7 +1,0 @@
-# Basic configuration for robot communication.
-# host: The IP address or hostname of the robot. Use "127.0.0.1" for local testing or mock environments.
-# port: The TCP port used to connect to the robot service. Should match the port your robot server is listening on.
-
-robot:
-  host: "127.0.0.1"  # Localhost for testing purposes
-  port: 5000        # Example communication port for testing

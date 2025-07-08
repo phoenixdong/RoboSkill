@@ -339,7 +339,7 @@ class RealmanArm:
 
 
 # Initialize FastMCP server
-mcp = FastMCP("robots")
+mcp = FastMCP("robots", stateless_http=True,  host='0.0.0.0', port=8888)
 
 
 @mcp.tool()
@@ -409,4 +409,4 @@ def grasp_object(object: str):
 
 if __name__ == "__main__":
     # Initialize and run the server
-    mcp.run(transport="stdio")
+    mcp.run(transport="streamable-http")
